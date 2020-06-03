@@ -1,0 +1,29 @@
+{% load crispy_forms_tags %}
+{% load static %}
+
+<div class="form-row">
+    {% if form_data.errors %}
+        {% for field in form_data %}
+            {% for error in field.errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
+        {% endfor %}
+        {% for error in form_data.non_field_errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="col-sm-12 mb-3 mb-sm-0 ">
+        {{ form_data.title|as_crispy_field }}
+    </div>
+    <div class="col-sm-12 mb-3 mb-sm-0">
+        {{ form_data.subject|as_crispy_field }}
+    </div>
+
+    <div class="col-sm-12 mb-3 mb-sm-0 ">
+        {{ form_data.body|as_crispy_field }}
+    </div>
+</div>

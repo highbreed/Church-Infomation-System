@@ -1,0 +1,25 @@
+{% load static %}
+<div class="card">
+    <div class="card-header py-12 d-flex flex-row align-items-center justify-content-between bg-primary">
+	    <h3 class="title card-title text-white">
+		    <i class="fas fa-question-circle"></i>
+		    Project Name: {{ response_data }}
+	    </h3>
+    </div>
+    <div class="card-body">
+        <table  class="table table-bordered table-striped col-12 ">
+	        <tr>
+                <th>Project Name:</th>
+                <td>{{ response_data}}</td>
+                <th>Amount:</th>
+                <td>{{ response_data.amount}}</td>
+            </tr>
+	        <tr>
+                <th>Contributor:</th>
+                <td>{{ response_data.member}}</td>
+                <th>Comment:</th>
+                <td>{{ response_data.comment}}</td>
+            </tr>
+        </table>
+    </div>
+</div>

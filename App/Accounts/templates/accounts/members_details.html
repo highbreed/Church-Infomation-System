@@ -1,0 +1,62 @@
+{% load static %}
+<div class="card">
+    <div class="card-header">
+        <div class="row no-gutters">
+            <div class="col-md-6">
+                <div class="img-hover">
+                    <img class="img-circle rounded-circle img-responsive img-thumbnail"
+                         src="/media/{{ member_data.image }}"
+                         alt="User profile picture" style="height: 160px; width: 160px;">
+                </div>
+            </div>
+            <div class="col-md-6 ">
+                <div class="container">
+                    <p class="h1 " >Name: {{ member_data }}</p>
+                    <p class="h2" >Phone:{{ member_data.phone_number }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <table  class="table table-bordered table-striped col-12 ">
+	        <tr>
+                <th>First Name</th>
+                <td>{{ member_data.first_name }}</td>
+                <th>Middle Name</th>
+                <td>{{ member_data.middle_name }}</td>
+            </tr>
+            <tr>
+                <th>Last Name</th>
+                <td>{{ member_data.last_name }}</td>
+                <th>UserName</th>
+                <td>{{ member_data.username }}</td>
+            </tr>
+            <tr>
+	            <th>Email</th>
+	            <td>{{ member_data.email }}</td>
+                <th>Gender</th>
+                <td>
+                    {{ member_data.gender }}
+                </td>
+            </tr>
+	        <tr>
+		        <th>Marital Status</th>
+                <td>
+                    {{ member_data.marital_status }}
+                </td>
+		        <th>Residency</th>
+                <td>
+                    {{ member_data.residency }}
+                </td>
+	        </tr>
+            <tr>
+                <th>Occupation</th>
+                <td>{{ member_data.occupation }}</td>
+                <th>citizenship</th>
+                <td>{{ member_data.citizenship }}</td>
+            </tr>
+
+        </table>
+    </div>
+</div>
+

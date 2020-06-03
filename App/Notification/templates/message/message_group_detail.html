@@ -1,0 +1,30 @@
+{% load static %}
+<div class="card">
+    <div class="card-header py-12 d-flex flex-row align-items-center justify-content-between bg-primary">
+	    <h3 class="title card-title text-white">
+		    <i class="fas fa-question-circle"></i>
+		    {{ response_data }}
+	    </h3>
+    </div>
+    <div class="card-body">
+        <table  class="table table-bordered table-striped col-12 ">
+	        <tr>
+                <th>Group Name:</th>
+                <td>{{ response_data}}</td>
+
+            </tr>
+	        <tr>
+		        <th>Total Members:</th>
+                <td>{{ response_data.members.count}}</td>
+	        </tr>
+	        <tr>
+                <th>Members:</th>
+                <td>
+	                {% for members in response_data.members.all %}
+	                    {{ members }},
+	                {% endfor %}
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

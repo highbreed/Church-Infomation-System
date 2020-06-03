@@ -1,0 +1,11 @@
+
+<p>{{ data }}</p>
+
+
+<div class="modal-footer">
+  <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+    <form action="{% url 'activity:delete_activity'  slug=member_id %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Delete" class="btn btn-danger">
+    </form>
+</div>

@@ -1,0 +1,70 @@
+{% load crispy_forms_tags %}
+
+<form class="user form"  method="post" action="{% url 'accounts:add_members' %}" enctype='multipart/form-data'>
+    {% csrf_token %}
+	<div class="row">
+        <div class="form-row">
+            <div class="form-group col-12">
+                <div class="form-row">
+                    <div class="form-group col-md-12 mb-0">
+                        <h4 class="title text-center">Membership Form</h4>
+                    </div>
+                    {% if form.errors %}
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <div class="alert alert-danger">
+                                    <strong>{{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <div class="col-sm-4 mb-3 mb-sm-0 ">
+                        {{ form_data.first_name|as_crispy_field }}
+                    </div>
+                    <div class="col-sm-4 mb-3 mb-sm-0">
+                        {{ form_data.middle_name|as_crispy_field }}
+                    </div>
+                    <div class="col-sm-4 mb-3 mb-sm-0">
+                        {{ form_data.last_name|as_crispy_field }}
+                    </div>
+
+                    <div class="col-sm-4 mb-3 mb-sm-0">
+                        {{ form_data.gender|as_crispy_field }}
+                    </div>
+                    <div class="col-sm-4 mb-3 mb-sm-0">
+                        {{ form_data.marital_status|as_crispy_field }}
+                    </div>
+                    <div class="col-sm-4 mb-3 mb-sm-0">
+                        {{ form_data.image|as_crispy_field }}
+                    </div>
+
+                    <div class="col-sm-12 mb-3 mb-sm-0">
+                        {{ form_data.email|as_crispy_field }}
+                    </div>
+                    <div class="col-sm-6 mb-3 mb-sm-0">
+                        {{ form_data.phone_number|as_crispy_field }}
+                    </div>
+                    <div class="col-sm-6 mb-3 mb-sm-0">
+                        {{ form_data.residency|as_crispy_field }}
+                    </div>
+                    <div class="col-sm-6 mb-3 mb-sm-0">
+                        {{ form_data.occupation|as_crispy_field }}
+                    </div>
+                    <div class="col-sm-6 mb-3 mb-sm-0">
+                        {{ form_data.citizenship|as_crispy_field }}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+	</div>
+    <hr>
+    <div class="form-group row">
+        <input type="submit" class="btn btn-primary btn-user btn-block" value="Register Member">
+    </div>
+</form>

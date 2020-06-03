@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+	<h1 class="h3 mb-0 text-gray-800">System Settings</h1>
+</div>
+
+
+<div class="card shadow ">
+	<div class="card-header bg-primary py-3 card-header d-flex flex-row align-items-center justify-content-between">
+		<h6 class="m-0 font-weight-bold text-white">
+			<i class="fas fa-question-circle"></i>
+			Church Information
+		</h6>
+		<div class="header-components">
+			<a class="js-add-member d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"  href="#UserViewModal" data-toggle="modal" >
+				<i class="fas fa-plus-circle"></i>
+				Create Information
+			</a>
+		</div>
+	</div>
+	<div class="card-body">
+		{% if response_data %}
+		    <table  class="table table-bordered table-striped col-12 ">
+		        <tr class="col-md-6">
+		            <th >Name:</th>
+		            <td >{{ response_data.name }}</td>
+			        <th>Pastor:</th>
+		            <td>{{ response_data.pastor }}</td>
+		        </tr>
+		        <tr>
+			        <th>Address:</th>
+		            <td>{{ response_data.address }}</td>
+			        <th>Location:</th>
+		            <td>{{ response_data.location }}</td>
+		        </tr>
+		        <tr>
+		            <th>Contact:</th>
+		            <td>{{ response_data.contact }}</td>
+
+		            <th>Mail:</th>
+		            <td>{{ response_data.email }}</td>
+		        </tr>
+		        <tr>
+		            <th>Logo:</th>
+			        {% if response_data.logo %}
+			            <td>
+			                <img class="table-img" src="/media/{{ response_data.logo }}" style="width: 150px;  height: 150px;">
+			            </td>
+			        {% else %}
+			            <td><strong>N/A</strong></td>
+			        {% endif %}
+		            <th>Image:</th>
+			        {% if response_data.image %}
+			            <td>
+			                <img class="table-img" src="/media/{{ response_data.image }}" style="width: 150px; height: 150px;">
+			            </td>
+			        {% else %}
+			            <td><strong>N/A</strong></td>
+			        {% endif %}
+		        </tr>
+		        <tr>
+		            <th >History:</th>
+		            <td colspan="3">{{ response_data.history }}</td>
+		        </tr>
+		    </table>
+		{% else %}
+			<p class="bg-warning text-white text-center">Information Unavailable, <strong>Create New</strong></p>
+		{% endif %}
+    </div>
+	<div class="card-footer">
+		<div class="float-right">
+			<a class="js-edit-member d-none d-sm-inline-block btn  btn-danger shadow-sm" data-link="{{response_data.id}}"  href="#UserViewModal" data-toggle="modal" >
+				<i class="fas fa-calendar-check"></i>
+				Update Settings
+			</a>
+		</div>
+	</div>
+</div>
+
+<!--Page Modals --->
+
+<div class="modal fade " id="UserViewModal" tabindex="-1"   role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Church Information</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body content">
+
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Close Page</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    $('.js-add-member ').click(function(){
+        $.ajax({
+            url: '{% url 'config:church_info_add' %}',
+            dataType: 'json',
+            success: function(data){
+                 $("#UserViewModal .content").html(data.html_response);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $("#UserViewModal .content").html(thrownError);
+		     }
+        });
+    });
+</script>
+<script>
+    $('.js-edit-member ').click(function(){
+        var user_id;
+        user_id = $(this).attr("data-link");
+        $.ajax({
+            url: '{% url 'config:church_info_edit' slug=1 %}',
+            dataType: 'json',
+            data: {
+                 post_id: user_id
+            },
+            success: function(data){
+                 $("#UserViewModal .content").html(data.html_response);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $("#UserViewModal .content").html(thrownError);
+		     }
+        });
+    });
+</script>
+{% endblock %}

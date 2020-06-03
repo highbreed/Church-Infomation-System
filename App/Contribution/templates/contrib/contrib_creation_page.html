@@ -1,0 +1,22 @@
+<div class="card shadow">
+	<div class="card-header bg-primary py-3 card-header d-flex flex-row align-items-center justify-content-between">
+		<h6 class="m-0 font-weight-bold text-white">
+			<i class="fas fa-question-circle"></i>
+			Add Contributions
+		</h6>
+	</div>
+	<div class="card-body">
+		<div class="form-responsive">
+			<form class="user form form-responsive" action="{% url 'contrib:create_church_contrib' slug=account.id %}" method="post" enctype='multipart/form-data'>
+			    {% csrf_token %}
+				<div class="row">
+					{% include 'contrib/contrib_form.html' %}
+				</div>
+			    <hr>
+			    <div class="form-group row">
+			        <input type="submit" class="btn btn-primary btn-user btn-block" value="Submit">
+			    </div>
+			</form>
+		</div>
+	</div>
+</div>

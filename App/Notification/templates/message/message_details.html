@@ -1,0 +1,37 @@
+{% load static %}
+<div class="card">
+    <div class="card-header py-12 d-flex flex-row align-items-center justify-content-between bg-primary">
+	    <h3 class="title card-title text-white">
+		    <i class="fas fa-question-circle"></i>
+		    Message View
+	    </h3>
+    </div>
+    <div class="card-body">
+        <table  class="table table-bordered table-striped col-12 ">
+	        <tr>
+                <th>Date:</th>
+                <td>{{ response_data.timestamp.date }}</td>
+            </tr>
+	        <tr>
+                <th>Time:</th>
+                <td>{{ response_data.timestamp.time }}</td>
+            </tr>
+	        <tr>
+		        <th>Total Recipients:</th>
+                <td>{{ response_data.receivers.count}}</td>
+	        </tr>
+	         <tr>
+                <th>Message:</th>
+                <td>{{ response_data.message }}</td>
+            </tr>
+	        <tr>
+                <th>Recipients:</th>
+                <td>
+	                {% for members in response_data.receivers.all %}
+	                    {{ members }},
+	                {% endfor %}
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,312 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+	<h1 class="h3 mb-0 text-gray-800">Project Page</h1>
+</div>
+<hr>
+<p><strong>Project Description: </strong>{{ response_data.description| capfirst }}</p>
+<hr>
+<div class="row">
+	<!-- Earnings (Monthly) Card Example -->
+	<div class="col-xl-8 col-md-8 mb-4">
+		<div class="card shadow mb-4">
+			<a href="#collapseCardAreaChart" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardAreaChart">
+              <h6 class="m-0 font-weight-bold text-primary">Contributions Graph</h6>
+            </a>
+			<div class="collapse" id="collapseCardAreaChart">
+				<div class="card-body">
+					<div class="chart-area">
+						<canvas id="myAreaChart" data-offset="{{data}}" data-key="{{labels}}"></canvas>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Earnings (Monthly) Card Example -->
+	<div class="col-xl-4 col-md-4 mb-4">
+		<div class="card shadow mb-4">
+			<!-- Card Header - Dropdown -->
+			<a href="#collapseCardPieChart" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardPieChart">
+              <h6 class="m-0 font-weight-bold text-primary">Contributions Chart</h6>
+            </a>
+			<!-- Card Body -->
+			<div class="collapse" id="collapseCardPieChart">
+				<div class="card-body">
+					<div class="chart-pie pt-4">
+						<canvas id="myPieChart" data-offset="{{ total_contributed }}"></canvas>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-xl-4 col-md-4 mb-4">
+		<div class="card border-left-primary shadow h-100 py-2">
+			<div class="card-body">
+				<div class="row no-gutters align-items-center">
+					<div class="col mr-2">
+						<div class="text-xs font-weight-bold text-primary text-center text-uppercase mb-1"><h4>Project Name:</h4></div>
+						<div class="h5 mb-0 font-weight-bold text-gray-800">{{ response_data|capfirst }}</div>
+	                </div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-xl-4 col-md-4 mb-4">
+		<div class="card border-left-warning shadow h-100 py-2">
+			<div class="card-body">
+				<div class="row no-gutters align-items-center">
+					<div class="col mr-2">
+						<div class="text-xs font-weight-bold text-primary text-center text-uppercase mb-1"><h4>Target Amount:</h4></div>
+						<div class="h5 mb-0 font-weight-bold text-center text-gray-800">KSh {{ response_data.target_amount|capfirst }}</div>
+	                </div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-xl-4 col-md-4 mb-4">
+		<div class="card border-left-success shadow h-100 py-2">
+			<div class="card-body">
+				<div class="row no-gutters align-items-center">
+					<div class="col mr-2">
+						<div class="text-xs font-weight-bold text-primary text-center text-uppercase mb-1"><h5>Total Contributions:</h5></div>
+						<div class="h5 mb-0 font-weight-bold text-center text-gray-800">KSh {{ contributed|capfirst }}</div>
+	                </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<!-- Earnings (Monthly) Card Example -->
+
+	<div class="col-md-12">
+		<!-- Main Card  -->
+		<div class="card shadow mb-12">
+			<div class="card-header py-3 card-header d-flex flex-row align-items-center justify-content-between">
+				<h6 class="m-0 font-weight-bold text-primary">
+					<i class="fas fa-question-circle"></i>
+					Total Contributions: {{ contributions.count }}
+				</h6>
+				<div class="float-right">
+					<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm">
+						<i class="fas fa-print fa-sm text-white-50"></i>
+						Print
+					</a>
+					<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm">
+						<i class="fas fa-download fa-sm text-white-50"></i>
+						Generate Report
+					</a>
+					<a class="js-add-btn btn btn-primary text-white" data-link="{{ response_data.id }}" href="#UserViewModal" data-toggle="modal"  >
+						<i class="fas fa-plus-circle"></i>
+						Add Contribution
+					</a>
+				</div>
+			</div>
+	        <div class="card-body">
+		        <div class="table-responsive">
+					<table class="table table-bordered " id="dataTable" width="100%" cellspacing="0">
+						<thead class="bg-dark text-white text-center">
+						<tr>
+							<th>Project Name</th>
+							<th>Amount</th>
+							<th>Comment</th>
+							<th>Action</th>
+
+				        </tr>
+						</thead>
+						<tfoot class="bg-dark text-white text-center">
+					        <tr>
+						        <th>Project Name</th>
+								<th>Amount</th>
+								<th>Comment</th>
+								<th>Action</th>
+					        </tr>
+						</tfoot>
+						<tbody>
+						{% if contributions %}
+							{% for department in contributions %}
+								<tr class="text-center">
+									<td>{{ department }}</td>
+									<td>{{ department.amount }}</td>
+									<td>{{ department.comment }}</td>
+									<td>
+										<a class="js-view-member btn btn-primary btn-sm" href="#UserViewModal"  data-toggle="modal" data-link="{{ department.pk }}" >
+											<i class="fas fa-fw fa-eye"></i>
+										</a>
+										<a class="js-edit-member btn btn-warning btn-sm" href="#UserViewModal"  data-toggle="modal" data-link="{{ department.pk }}">
+											<i class="fas fa-fw fa-edit"></i>
+										</a>
+										<a class="js-delete-member btn btn-danger btn-sm" href="#" data-toggle="modal" data-link="{{ department.pk }}" data-target="#DeleteModal">
+											<i class="fas fa-fw fa-trash"></i>
+										</a>
+									</td>
+								</tr>
+							{% endfor %}
+						{% else %}
+						<tr class="text-center text-white font-bold bg-warning">
+							<td></td>
+							<td></td>
+							<td>Data Unavailable</td>
+							<td></td>
+
+						</tr>
+						{% endif %}
+						</tbody>
+					</table>
+		        </div>
+	        </div>
+		</div>
+	</div>
+</div>
+
+<!--Page Modals --->
+
+<div class="modal fade " id="UserViewModal" tabindex="-1"   role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Project Page</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body content">
+
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Close Page</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Delete Modal-->
+  <div class="modal fade bg-dark" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="DeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="DeleteModalLabel">Confirm Deletion.</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body content">
+        </div>
+
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+	$(document).ready(function() {
+	  $('#dataTable').DataTable();
+	});
+</script>
+
+  <!-- Custom styles for this page -->
+  <link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+<!-- Page level plugins -->
+  <script src="{% static 'vendor/datatables/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+
+<!-- Page level custom scripts -->
+  <script src="{% static 'js/demo/datatables-demo.js' %}"></script>
+
+ <!-- Page level plugins -->
+  <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
+
+  <!-- Page level custom scripts -->
+  <script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
+<script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
+<script>
+    $('.js-add-btn ').click(function(){
+        var user_id;
+        user_id = $(this).attr("data-link");
+        $.ajax({
+            url: '{% url 'contrib:create_project_contrib' slug=1 %}',
+            dataType: 'json',
+            data: {
+                 post_id: user_id
+            },
+            success: function(data){
+                 $("#UserViewModal .content").html(data.html_response);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $("#UserViewModal .content").html(thrownError);
+		     }
+        });
+    });
+</script>
+
+<!--Call Members Edition Page -->
+<script>
+    $('.js-edit-member ').click(function(){
+        var user_id;
+        user_id = $(this).attr("data-link");
+        $.ajax({
+            url: '{% url 'contrib:edit_project_contrib_church' slug=1 %}',
+            dataType: 'json',
+            data: {
+                 post_id: user_id
+            },
+            success: function(data){
+                 $("#UserViewModal .content").html(data.html_response);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $("#UserViewModal .content").html(thrownError);
+		     }
+        });
+    });
+</script>
+
+<script>
+    $('.js-view-member ').click(function(){
+        var user_id;
+        user_id = $(this).attr("data-link");
+        $.ajax({
+            url: '{% url 'contrib:detail_project_contrib_church'%}',
+            dataType: 'json',
+            data: {
+                 post_id: user_id
+            },
+            success: function(data){
+                 $("#UserViewModal .content").html(data.html_response);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $("#UserViewModal .content").html(thrownError);
+		     }
+        });
+    });
+</script>
+
+<!--Call Members Edition Page -->
+
+<script>
+    $('.js-delete-member ').click(function(){
+        var user_id;
+        user_id = $(this).attr("data-link");
+        $.ajax({
+            url: '{% url 'contrib:delete_project_contrib_church' slug=1 %}',
+            dataType: 'json',
+            data: {
+                 post_id: user_id
+            },
+            success: function(data){
+                 $("#DeleteModal .content").html(data.html_response);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $("#UserViewModal .content").html(thrownError);
+		    }
+        });
+    });
+</script>
+<script>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="card shadow mb-4">
+	<div class="card-header py-3 card-header d-flex flex-row align-items-center justify-content-between">
+		<h6 class="m-0 font-weight-bold text-primary">{{ members.count }}: Registered members</h6>
+		<div class="header-components">
+			<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm">
+				<i class="fas fa-print fa-sm text-white-50"></i>
+				Print
+			</a>
+		</div>
+	</div>
+	<div class="card-body">
+		<div class="messaging">
+		  <div class="inbox_msg">
+			<div class="inbox_people">
+
+			  <div class="inbox_chat">
+				  {% for thread in response_data %}
+						<div class="chat_list" onclick="console.log('clecki')">
+							<div class="chat_people">
+								<div class="chat_img">
+									<img src="https://ptetutorials.com/images/user-profile.png" alt="sunil">
+								</div>
+								<div class="chat_ib">
+									<h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
+									<p>Test, which is a new approach to have all solutions
+										astrology under one roof.</p>
+								</div>
+							</div>
+						</div>
+				  {% endfor %}
+			  </div>
+			</div>
+
+		  </div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block extra_scripts %}
+<link href="{% static 'custom/css/chart_css.css' %}" rel="stylesheet">
+{% endblock %}

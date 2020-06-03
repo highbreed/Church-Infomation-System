@@ -1,0 +1,19 @@
+<div class="card shadow">
+	<div class="card-header bg-primary py-3 card-header d-flex flex-row align-items-center justify-content-between">
+		<h6 class="m-0 font-weight-bold text-white">
+			<i class="fas fa-question-circle"></i>
+			Add Recipients Group
+		</h6>
+	</div>
+	<div class="card-body">
+		<div class="form-responsive">
+			<form class="user form form-responsive" action="{% url 'notice:add_message_groups' %}" method="post" enctype='multipart/form-data'>
+			    {% csrf_token %}
+				<div class="row">
+					{% include 'message/message_group_form.html' %}
+
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

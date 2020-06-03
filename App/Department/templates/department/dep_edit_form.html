@@ -1,0 +1,92 @@
+{% load crispy_forms_tags %}
+{% load static %}
+
+<div class="row">
+	<div class="col-md-12 mb-0">
+		<div class="card">
+			<div class="card-header bg-primary">
+				<h3 class="title card-title text-center text-white">
+					<i class="fas fa-question-circle"></i>
+					Edit {{ department }}
+				</h3>
+			</div>
+			<div class="card-body">
+				<form class="js-edit-department user form" action="{% url 'dep:edit_department' slug=department.id %}" method="post" enctype='multipart/form-data'>
+				    {% csrf_token %}
+					<div class="row">
+				        <div class="form-row">
+				            <div class="form-group col-12">
+				                <div class="form-row">
+				                    {% if form.errors %}
+				                        {% for field in form %}
+				                            {% for error in field.errors %}
+				                                <div class="alert alert-danger">
+				                                    <strong>{{ error|escape }}</strong>
+				                                </div>
+				                            {% endfor %}
+				                        {% endfor %}
+				                        {% for error in form.non_field_errors %}
+				                            <div class="alert alert-danger">
+				                                <strong>{{ error|escape }}</strong>
+				                            </div>
+				                        {% endfor %}
+				                    {% endif %}
+				                    <div class="col-sm-6 mb-3 mb-sm-0 ">
+				                        {{ form_data.name|as_crispy_field }}
+				                    </div>
+				                    <div class="col-sm-6 mb-3 mb-sm-0">
+				                        {{ form_data.description|as_crispy_field }}
+				                    </div>
+				                    <div class="col-6 mb-3 mb-sm-0">
+				                        {{ form_data.department_head|as_crispy_field }}
+				                    </div>
+
+				                    <div class="col-6 mb-3 mb-sm-0">
+				                        {{ form_data.department_secretary|as_crispy_field }}
+				                    </div>
+				                    <div class="col-6 mb-3 mb-sm-0">
+				                        {{ form_data.department_treasurer|as_crispy_field }}
+				                    </div>
+				                    <div class="col-6 mb-3 mb-sm-0">
+				                        {{ form_data.members_of_department|as_crispy_field }}
+				                    </div>
+				                </div>
+
+				            </div>
+				        </div>
+					</div>
+				    <hr>
+				    <div class="form-group row">
+				        <input type="submit" class="btn btn-primary btn-user btn-block" value="Submit">
+				    </div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+
+{{ form_data.media }}
+
+<script>
+(function($) {
+    $('#add-form').click(function() {
+        var index = $('#id_inline_test_models-TOTAL_FORMS').val()
+        var newTable = $('#id_inline_test_models-__prefix__-DELETE').parents('table').clone()
+        newTable.find(':input').each(function() {
+            for (attr of ['name', 'id'])
+                $(this).attr(
+                    attr,
+                    $(this).attr(attr).replace('__prefix__', index)
+                )
+        })
+        newTable.insertBefore($(this))
+        $('#id_inline_test_models-TOTAL_FORMS').val(
+            parseInt($('#id_inline_test_models-TOTAL_FORMS').val()) + 1
+        )
+        newTable.slideDown()
+    })
+})($)
+</script>

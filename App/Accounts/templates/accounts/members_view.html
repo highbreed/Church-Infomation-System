@@ -1,0 +1,259 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<h1 class="h3 mb-2 text-gray-800">Register Page</h1>
+<div class="card shadow mb-4">
+<div class="card-header py-3 card-header d-flex flex-row align-items-center justify-content-between">
+	<h6 class="m-0 font-weight-bold text-primary">{{ members.count }}: Registered members</h6>
+	<div class="header-components">
+		<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm">
+			<i class="fas fa-print fa-sm text-white-50"></i>
+			Print
+		</a>
+		<a href="#UserViewModal" data-toggle="modal"  class="js-add-excel-btn d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm">
+	          <i class="fas fa-upload fa-sm text-white-50"></i>
+	          Add From Excel
+		</a>
+		<a class="js-add-btn d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"  href="#UserViewModal" data-toggle="modal"  >
+			<i class="fas fa-plus-circle"></i>
+			Add Member
+		</a>
+	</div>
+</div>
+<div class="card-body">
+	<div class="table-responsive">
+		<table class="table table-bordered " id="dataTable" width="100%" cellspacing="0">
+			<thead class="bg-dark text-white text-center">
+			<tr>
+				<th>Image</th>
+				<th>Name</th>
+				<th>Gender</th>
+
+				<th>Phone Number</th>
+				<th>Residency</th>
+				<th>Action</th>
+
+	        </tr>
+      </thead>
+      <tfoot class="bg-dark text-white text-center">
+        <tr>
+	        <th>Image</th>
+			<th>Name</th>
+			<th>Gender</th>
+
+			<th>Phone Number</th>
+			<th>Residency</th>
+	        <th>Action</th>
+        </tr>
+      </tfoot>
+      <tbody>
+      {% if members %}
+		      {% for member in members %}
+		        <tr class="text-center">
+		          <td>
+			          <img src="/media/{{ member.image }}" class="img-profile rounded-circle" style="width:40px; height:40px;" >
+		          </td>
+		          <td>{{ member }} {{ member.last_name}}</td>
+		          <td>{{ member.gender }}</td>
+
+		          <td>{{ member.phone_number }}</td>
+		          <td>{{ member.residency }}</td>
+			        <td>
+				        <a class="js-view-member btn btn-primary btn-sm" href="#UserViewModal" data-toggle="modal" data-link="{{ member.pk }}">
+					        <i class="fas fa-fw fa-eye"></i>
+				        </a>
+				        <a class="js-edit-member btn btn-warning btn-sm" href="#UserViewModal"  data-toggle="modal" data-link="{{ member.pk }}">
+					        <i class="fas fa-fw fa-edit"></i>
+				        </a>
+				        <a class="js-delete-member btn btn-danger btn-sm" href="#" data-toggle="modal" data-link="{{ member.pk }}" data-target="#DeleteModal">
+					        <i class="fas fa-fw fa-trash"></i>
+				        </a>
+
+			        </td>
+		        </tr>
+		      {% endfor %}
+      {% else %}
+      <tr class="text-center bg-warning text-white font-bold">
+	      <td></td>
+	      <td></td>
+
+	      <td>Data Unavailable</td>
+	      <td></td>
+	      <td></td>
+	      <td></td>
+      </tr>
+      {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+
+
+<!--Page Modals --->
+
+<div class="modal fade " id="UserViewModal" tabindex="-1"   role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Register Page</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body content">
+
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Close Page</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Delete Modal-->
+  <div class="modal fade bg-dark" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="DeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="DeleteModalLabel">Confirm Deletion.</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body content">
+
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_scripts %}
+
+<script>
+	$(document).ready(function() {
+	  $('#dataTable').DataTable();
+	});
+</script>
+
+  <!-- Custom styles for this page -->
+  <link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+<!-- Page level plugins -->
+  <script src="{% static 'vendor/datatables/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+
+<!-- Page level custom scripts -->
+  <script src="{% static 'js/demo/datatables-demo.js' %}"></script>
+
+<!--Call Members Details Page -->
+
+<script>
+    $('.js-add-excel-btn ').click(function(){
+        $.ajax({
+            url: '{% url 'accounts:add_member_excel' %}',
+            dataType: 'json',
+            success: function(data){
+                 $("#UserViewModal .content").html(data.html_response);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $("#UserViewModal .content").html(thrownError);
+		     }
+        });
+    });
+</script>
+
+<script>
+    $('.js-add-btn ').click(function(){
+        var user_id;
+        user_id = $(this).attr("data-link");
+        $.ajax({
+            url: '{% url 'accounts:add_members' %}',
+            dataType: 'json',
+            data: {
+                 post_id: user_id
+            },
+            success: function(data){
+                 $("#UserViewModal .content").html(data.html_response);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $("#UserViewModal .content").html(thrownError);
+		     }
+        });
+    });
+</script>
+
+<script>
+    $('.js-view-member ').click(function(){
+        var user_id;
+        user_id = $(this).attr("data-link");
+        $.ajax({
+            url: '{% url 'accounts:member_details' %}',
+            dataType: 'json',
+            data: {
+                 post_id: user_id
+            },
+            success: function(data){
+                 $("#UserViewModal .content").html(data.html_response);
+            }
+        });
+    });
+</script>
+
+<!--Call Members Edition Page -->
+<script>
+    $('.js-edit-member ').click(function(){
+        var user_id;
+        user_id = $(this).attr("data-link");
+        $.ajax({
+            url: '{% url 'accounts:edit_members' pk=1 %}',
+            dataType: 'json',
+            data: {
+                 post_id: user_id
+            },
+            success: function(data){
+                 $("#UserViewModal .content").html(data.html_response);
+            }
+        });
+    });
+</script>
+
+<!--Submit Form -->
+<script>
+    $("#UserViewModal").on("submit", 'js-edit-member', function(){
+        var form = $(this);
+        $.ajax({
+            url: form.attr("action"),
+            data: form.serialize(),
+            type: form.attr("method"),
+            dataType: 'json',
+            success: function(data){
+                 $("#UserViewModal .content").html(data.html_response);
+            }
+        });
+        return false;
+    });
+</script>
+
+<!--Call Members Edition Page -->
+<script>
+    $('.js-delete-member ').click(function(){
+        var user_id;
+        user_id = $(this).attr("data-link");
+        $.ajax({
+            url: '{% url 'accounts:delete_members' slug=1 %}',
+            dataType: 'json',
+            data: {
+                 post_id: user_id
+            },
+            success: function(data){
+                 $("#DeleteModal .content").html(data.html_response);
+            }
+        });
+    });
+</script>
+<script>
+{% endblock %}

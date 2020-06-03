@@ -1,0 +1,55 @@
+{% load crispy_forms_tags %}
+{% load static %}
+
+<div class="form-row">
+    {% if form_data.errors %}
+        {% for field in form_data %}
+            {% for error in field.errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
+        {% endfor %}
+        {% for error in form_data.non_field_errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="col-sm-12 mb-3 mb-sm-0 ">
+        {{ form_data.name |as_crispy_field }}
+    </div>
+    <div class="col-sm-12 mb-3 mb-sm-0 ">
+        {{ form_data.user |as_crispy_field }}
+    </div>
+    <div class="col-sm-12 mb-3 mb-sm-0">
+        {{ form_data.members |as_crispy_field }}
+    </div>
+</div>
+<hr>
+<input type="submit" class="btn btn-primary btn-user btn-block" value="Submit">
+
+<script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+
+{{ form_data.media }}
+
+<script>
+(function($) {
+    $('#add-form').click(function() {
+        var index = $('#id_inline_test_models-TOTAL_FORMS').val()
+        var newTable = $('#id_inline_test_models-__prefix__-DELETE').parents('table').clone()
+        newTable.find(':input').each(function() {
+            for (attr of ['name', 'id'])
+                $(this).attr(
+                    attr,
+                    $(this).attr(attr).replace('__prefix__', index)
+                )
+        })
+        newTable.insertBefore($(this))
+        $('#id_inline_test_models-TOTAL_FORMS').val(
+            parseInt($('#id_inline_test_models-TOTAL_FORMS').val()) + 1
+        )
+        newTable.slideDown()
+    })
+})($)
+</script>

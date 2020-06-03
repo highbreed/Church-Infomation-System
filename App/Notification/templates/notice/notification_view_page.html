@@ -1,0 +1,30 @@
+{% load static %}
+<div class="card">
+    <div class="card-header py-12 d-flex flex-row align-items-center justify-content-between bg-primary">
+	    <h3 class="title card-title text-white">
+		    <i class="fas fa-question-circle"></i>
+		    {{ response_data }}
+	    </h3>
+    </div>
+    <div class="card-body">
+        <table  class="table table-bordered table-striped col-12 ">
+	        <tr>
+                <th>Title:</th>
+                <td>{{ response_data}}</td>
+
+            </tr>
+	        <tr>
+		        <th>Subject:</th>
+                <td>{{ response_data.subject}}</td>
+	        </tr>
+	        <tr>
+                <th>Message:</th>
+                <td>{{ response_data.body}}</td>
+            </tr>
+	        <tr>
+		        <th>From:</th>
+                <td>{{ response_data.sender }}</td>
+	        </tr>
+        </table>
+    </div>
+</div>
